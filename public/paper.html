@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thinking Longer, Not Always Smarter | Paper Breakdown</title>
+    <meta name="generator" content="Paper Breakdown"/>
+    <meta property="og:title" content="Thinking Longer, Not Always Smarter"/>
+    <meta name="author" content="Li Zhang, Matthias Grabmair, Morgan Gray, Kevin Ashley"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="og:description" content="Evaluating LLM Capabilities in Hierarchical Legal Reasoning"/>
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta property="twitter:title" content="Thinking Longer, Not Always Smarter"/>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0KOVEMmdYbcTVJCEgG4AY+fSyH3gtDlg+eIiG28EMfnllIvl2NTDi" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzOK91ZN魚+48t5v+WMxUaaBH4jNn9StJC" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+
+    <style>
+        :root {
+            --background-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --secondary-text-color: #6e6e73;
+            --card-background: #ffffff;
+            --accent-color: #0071e3;
+            --border-color: #d2d2d7;
+            --code-background: #f0f0f0;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --header-bg: #ffffff;
+            --header-border: #e5e5e7;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            font-size: 17px;
+            letter-spacing: -0.022em;
+        }
+
+        .site-header {
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--header-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .site-header .wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .site-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .site-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-trigger {
+            display: none;
+        }
+
+        .menu-icon {
+            display: none;
+        }
+
+        .trigger {
+            display: flex;
+            gap: 30px;
+        }
+
+        .page-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .page-link:hover {
+            color: var(--accent-color);
+        }
+
+        .page-content {
+            padding: 20px 0;
+        }
+
+        .post {
+            background-color: transparent;
+            border-radius: 0;
+            padding: 0;
+            margin: 0;
+            max-width: none;
+            box-shadow: none;
+        }
+
+        .post-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .post-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .post-subtitle {
+            font-size: 18px;
+            color: var(--secondary-text-color);
+            margin-bottom: 20px;
+        }
+
+        .authors {
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .authors div {
+            margin-bottom: 5px;
+        }
+
+        .authors strong {
+            font-weight: 600;
+        }
+
+        .affiliations {
+            text-align: center;
+            margin: 15px 0 25px 0;
+            font-size: 12px;
+            color: var(--secondary-text-color);
+        }
+
+        .links {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin: 0 5px;
+            font-weight: 500;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+        }
+
+        h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 0 8px 0;
+        }
+
+        p {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: var(--accent-color);
+            font-weight: 600;
+            display: inline;
+        }
+
+        .boxed {
+            background-color: rgba(0, 113, 227, 0.05);
+            border: 1px solid rgba(0, 113, 227, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .boxed strong {
+            display: block;
+            font-size: 16px;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+        }
+
+        .figure-placeholder {
+            text-align: center;
+            margin: 25px 0;
+            border: 1px dashed var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+
+        .figure-placeholder img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .figure-placeholder p {
+            font-style: italic;
+            color: var(--secondary-text-color);
+            margin: 10px 0 0 0;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            background-color: var(--card-background);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px var(--shadow-color);
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--background-color);
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        caption {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .reviewer-comment {
+            border-left: 3px solid var(--accent-color);
+            padding: 15px;
+            background-color: rgba(0, 113, 227, 0.03);
+            border-radius: 0 4px 4px 0;
+            margin: 20px 0;
+        }
+
+        .reviewer-comment strong {
+            color: var(--accent-color);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        dl {
+            margin: 15px 0;
+        }
+
+        dt {
+            font-weight: 600;
+            margin: 15px 0 8px 0;
+            color: var(--text-color);
+            font-size: 16px;
+        }
+
+        dd {
+            margin-left: 15px;
+            margin-bottom: 10px;
+            color: var(--secondary-text-color);
+            padding-left: 10px;
+            border-left: 2px solid var(--border-color);
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        code, pre {
+            font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background-color: var(--code-background);
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
+        code {
+            padding: 0.1em 0.3em;
+        }
+
+        pre {
+            padding: 15px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 15px 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .nowrap {
+            white-space: nowrap;
+        }
+
+        .katex {
+            font-size: 1.1em !important;
+        }
+
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 1rem 0;
+        }
+
+        .katex {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .site-footer {
+            background-color: var(--header-bg);
+            border-top: 1px solid var(--header-border);
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+
+        .footer-heading {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-col-wrapper {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .footer-col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .contact-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact-list li {
+            margin-bottom: 10px;
+        }
+
+        .u-email {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .u-email:hover {
+            text-decoration: underline;
+        }
+
+        @media screen and (max-width: 768px) {
+            .site-header .wrapper {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .trigger {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .post-title {
+                font-size: 24px;
+            }
+
+            .post-subtitle {
+                font-size: 16px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            h3 {
+                font-size: 18px;
+            }
+
+            .figure-placeholder {
+                padding: 15px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .nav-trigger {
+                display: block;
+            }
+
+            .menu-icon {
+                display: block;
+                width: 18px;
+                height: 15px;
+            }
+
+            .trigger {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--header-bg);
+                border-top: 1px solid var(--header-border);
+                padding: 15px;
+                flex-direction: column;
+            }
+
+            .nav-trigger:checked ~ .trigger {
+                display: flex;
+            }
+
+            .post-title {
+                font-size: 22px;
+            }
+
+            .authors {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrapper">
+            <a class="site-title" href="/">Thinking Longer ≠ Thinking Smarter</a>
+            <nav class="site-nav">
+                <input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+                <label for="nav-trigger">
+                    <span class="menu-icon">
+                        <svg viewBox="0 0 18 15" width="18px" height="15px">
+                            <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+                        </svg>
+                    </span>
+                </label>
+
+                <div class="trigger">
+                    <a class="page-link" href="#tldr">TL;DR</a>
+                    <a class="page-link" href="#framework">Framework</a>
+                    <a class="page-link" href="#example">Example</a>
+                    <a class="page-link" href="#results">Results</a>
+                    <a class="page-link" href="#case-study">Case Study</a>
+                    <a class="page-link" href="#citation">Citation</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+            <article class="post">
+                <header class="post-header">
+                    <h1 class="post-title">Thinking Longer, Not Always Smarter</h1>
+                    <p class="post-subtitle">Evaluating LLM Capabilities in Hierarchical Legal Reasoning</p>
+                    
+                    <div class="authors">
+                        <div><strong>Li Zhang</strong>, University of Pittsburgh, USA</div>
+                        <div><strong>Matthias Grabmair</strong>, Technical University of Munich, Germany</div>
+                        <div><strong>Morgan Gray</strong>, University of Pittsburgh, USA</div>
+                        <div><strong>Kevin Ashley</strong>, University of Pittsburgh, USA</div>
+                    </div>
+
+                    <div class="links">
+                        <a href="https://arxiv.org/abs/2510.08710">[Paper]</a>
+                        <a href="#citation">[Citation]</a>
+                    </div>
+                </header>
+
+                <div class="post-content">
+                    <section id="tldr">
+                        <h2>⚡ TL;DR</h2>
+                        <p>
+                            In U.S. legal practice, case-based reasoning is a cornerstone. As Large Language Models (LLMs) show remarkable capabilities in various reasoning tasks, a critical question emerges: <strong class="highlight">Can they handle the complex, nuanced reasoning required in law?</strong>
+                        </p>
+                        
+                        <div>
+                            <p>
+                                This work introduces an innovative formal framework that deconstructs finding "significant distinctions" into three tasks of increasing complexity. Through a comprehensive evaluation of modern reasoning LLMs, the research uncovers a striking paradox that thinking <strong class="highlight">longer</strong> does not always mean thinking <strong class="highlight">smarter</strong>:
+                            </p>
+
+                            <div class="figure-placeholder">
+                                <img src="/results.png" alt="Results: accuracy drops with task complexity" style="max-width:80%;width:80%;height:auto" />
+                                <p><strong>Result A.</strong> Model performance across Tasks 1-3. The left panel illustrates accuracy, showing a decline as tasks become more complex. The right panel displays the average number of thinking tokens used, which increases with task difficulty.</p>
+                            </div>
+                            <div class="figure-placeholder">
+                                <img src="/thinking_differences.png" alt="Thinking differences: more tokens on wrong answers" style="max-width:40%;width:40%;height:auto" />
+                                <p><strong>Result B.</strong> Token usage patterns reveal inefficient reasoning strategies. The figure shows the difference in thinking tokens between incorrect and correct responses across Tasks 2-3, highlighting how models often expend more computational effort on answers they ultimately get wrong.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="experiments">
+                        <h2>⚙️ Experimental Method and Design</h2>
+
+                        <h3>Evaluation Pipeline</h3>
+                        <div class="figure-placeholder">
+                            <img src="/pipeline.png" alt="Evaluation pipeline" style="max-width:80%;width:80%;height:auto" />
+                            <p><strong>Figure 1.</strong> The pipeline consists of four stages: 1) Scenario Generation: Creates pairs of cases tailored to test specific legal reasoning challenges like blocking and downplaying. 2) Ground Truth Creation: A deterministic solver applies the formal rules to produce the correct answer for each task. 3) LLM Inference: The scenarios are presented to LLMs via structured prompts. 4) Evaluation: LLM responses are compared against the ground truth to measure performance.</p>
+                        </div>
+                        
+                        <h3>Experimental Details</h3>
+                        <ul>
+                            <li><strong>Dataset</strong>: 253 test instances per task.</li>
+                            <li><strong>Knowledge Hierarchy</strong>: Provided in Mermaid format.</li>
+                            <li><strong>Models</strong>: gpt-5, qwen3-thinking, gpt-oss-120b, gemini-pro, gemini-flash; control: qwen3-non-thinking.</li>
+                            <li><strong>Params</strong>: temperature=0.3, top_p=0.95, max_tokens=65536.</li>
+                        </ul>
+                    </section>
+
+                    <section id="framework">
+                        <h2>🧩 A Decomposed Framework for Identifying Significant Distinctions</h2>
+                        <div class="figure-placeholder">
+                            <img src="/framework.png" alt="Figure 2: The decomposed framework for identifying significant distinctions, which consists of three steps: (1) identify distinctions, (2) analyze argumentative roles of a distinction via legal knowledge hierarchy, and (3) identify significant distinctions. Red and blue presents the favoring side of the factors." style="max-width:80%;height:auto" />
+                            <p><strong>Figure 2.</strong> The decomposed framework for identifying significant distinctions, which consists of three steps: (1) identify distinctions, (2) analyze argumentative roles of a distinction via legal knowledge hierarchy, and (3) identify significant distinctions. Red and blue presents the favoring side of the factors.</p>
+                        </div>
+                        <div class="boxed">
+                            <strong>Overview</strong>
+                            <p>
+                                To enable a computable and verifiable evaluation of LLM capabilities, the paper formalizes the reasoning process. The core is defining the representation of cases and the legal knowledge hierarchy they operate within.
+                            </p>
+                        </div>
+
+                        <h3>Case Representation</h3>
+                        <dl>
+                            <dt>Definition 1: Factor</dt>
+                            <dd>
+                                A legal case can be distilled into a set of legally relevant, stereotyped fact patterns called "factors". A factor f is a predicate representing such a fact. The set of all possible factors is denoted by 𝔉. Each factor f ∈ 𝔉 has a favored party, s(f) ∈ {p, d}, where p is the plaintiff and d is the defendant.
+                            </dd>
+
+                            <dt>Definition 2: Case</dt>
+                            <dd>
+                                A case C is represented as a pair (F, o), where F ⊆ 𝔉 is the set of factors present in the case, and o ∈ {p, d} is the outcome (the winning party). In the analysis, we consider a current case C1 = (F1, o1) and a precedent case C2 = (F2, o2).
+                            </dd>
+                        </dl>
+
+                        <h3>Hierarchy of Legal Knowledge</h3>
+                        <dl>
+                            <dt>Definition 3: Hierarchy and Nodes</dt>
+                            <dd>
+                                The legal knowledge hierarchy is a DAG G = (V, E), where:
+                                <ul>
+                                    <li>The set of nodes V = 𝓕 ∪ 𝓒 ∪ 𝓘 comprises base-level factors (𝓕), intermediate legal concerns (𝓒), and top-level legal issues (𝓘).</li>
+                                    <li>The set of edges E represents support relationships. An edge from node u to v means u provides evidence for v.</li>
+                                </ul>
+                            </dd>
+                             <dt>Definition 4: Edge Strength</dt>
+                            <dd>
+                                Each edge e ∈ E has a strength, σ(e) ∈ {strong, weak}.
+                            </dd>
+                        </dl>
+
+                        <h3>Framework for Identifying Significant Distinctions</h3>
+                        <div class="boxed">
+                        <h4>Task 1: Identify Distinctions</h4>
+                        <p>This foundational step involves finding all factual differences that could make the precedent a poor analogy.</p>
+                        </div>
+                        <dl>
+                            <dt>Definition 5: Distinction</dt>
+                            <dd>
+                                Given a current case C1=(F1, o1) and a precedent C2=(F2, o2), a factor f is a "distinction" if it satisfies one of the following conditions:
+                                <ol>
+                                    <li><strong>Type 1</strong>: The factor is a strength for the precedent's winner that the current case lacks: f ∈ F2 ∧ f ∉ F1 ∧ s(f) = o2.</li>
+                                    <li><strong>Type 2</strong>: The factor is a weakness for the precedent's loser that is present in the current case: f ∈ F1 ∧ f ∉ F2 ∧ s(f) ≠ o2.</li>
+                                </ol>
+                            </dd>
+                        </dl>
+                        
+                        <div class="boxed">
+                        <h4>Task 2: Analyze Argumentative Roles of A Distinction</h4>
+                        <p>Whether a distinction is persuasive depends on its role in the knowledge hierarchy. This step requires deeper, hierarchical reasoning.</p>
+                        </div>
+                        <dl>
+                            <dt>Definitions 6-8: Effective Support & Blocking</dt>
+                            <dd>
+                                A path π(f, P) from a factor f to an ancestor concern P can be strong or weak. If a factor supports P via a weak path, but an opposing factor in the same case supports P via a strong path, the former's support is "blocked". A factor provides "effective support" for P if its path is strong, or if it is weak and not blocked.
+                            </dd>
+                            <dt>Definitions 9 & 10: Downplaying & Emphasizing</dt>
+                            <dd>
+                                <ul>
+                                    <li>A distinction D can be <strong>emphasized</strong> if it provides effective support for a concern P for which the other case lacks any effective support. This creates a crucial argumentative gap.</li>
+                                    <li>A distinction D can be <strong>downplayed</strong> if, in the other case, an alternative factor f_alt exists that provides effective support for the same concern P. This points to other facts that serve the same argumentative purpose.</li>
+                                </ul>
+                            </dd>
+                        </dl>
+                        
+                        <div class="boxed">
+                        <h4>Task 3: Identify All Significant Distinctions</h4>
+                        <p>This is the final, integrative task that synthesizes all previous analyses.</p>
+                        </div>
+                        <dl>
+                            <dt>Definition 11: Significant Distinction</dt>
+                            <dd>
+                                A significant distinction represents a fundamental difference between cases that provides a strong basis for arguing for a different outcome:
+                                A distinction D is "significant" if and only if it can be emphasized and it cannot be downplayed.
+                            </dd>
+                        </dl>
+                    </section>
+
+                    <section id="example">
+                        <h2>📋 An Illustrative Example of the Decomposed Framework</h2>
+                        <p>To illustrate our three-task framework, we use an example from U.S. trade secret law to walk through each task. For example, we can consider the following cases:</p>
+                        
+                        <div class="boxed">
+                            <strong>Example Cases</strong>
+                            <ul>
+                                <li><strong>Current Case (C1)</strong>: Company A (plaintiff) is suing a former employee (defendant) for trade secret theft, but they lacked basic security measures.</li>
+                                <li><strong>Precedent Case (C2)</strong>: Company B (plaintiff) won a trade secret lawsuit against a former employee (defendant) because they took extensive security measures (locked facilities, employee confidentiality agreements, restricted access). However, the plaintiff also waived their employees' confidentiality agreement.</li>
+                            </ul>
+                        </div>
+
+                        <h3>Factor Representation</h3>
+                        <p>The natural language narratives can be translated into a set of pre-defined factors. A (d) marks a factor favoring the defendant, while (p) favors the plaintiff. For instance, "lacked basic security measures" corresponds to F19_No-Security-Measures(d), which hurts the plaintiff's claim. The factor representations for our example cases are as follows:</p>
+                        <ul>
+                            <li><strong>Current Case (C1) Factors</strong>: F19_No-Security-Measures(d)</li>
+                            <li><strong>Precedent Case (C2) Factors</strong>: F6_Security-Measures(p), F23_Waiver-of-Confidentiality(d)</li>
+                            <li><strong>Precedent (C2) Winner</strong>: Plaintiff</li>
+                        </ul>
+
+                        <h3>Task 1: Identify Distinctions</h3>
+                        <p>With the cases represented as factors, the first task is to identify all unshared factors that could serve as distinctions.</p>
+                        
+                        <div class="boxed">
+                            <strong>Analysis of Distinctions</strong>
+                            <p>A distinction is an unshared factor that weakens the analogy between the precedent and the current case.</p>
+                            <ul>
+                                <li><strong>Pro-Plaintiff factor in C2, absent in C1</strong>: F6_Security-Measures(p). This is a distinction because the precedent winner (plaintiff) was strengthened by a factor that the current plaintiff lacks. The defendant in C1 can argue that the precedent is not a good analogy because the plaintiff's victory in C2 relied on F6, which is absent here.</li>
+                                <li><strong>Pro-Defendant factor in C1, absent in C2</strong>: F19_No-Security-Measures(d). This is a distinction because the current case contains a weakness for the plaintiff (a strength for the defendant) that was not present in the precedent.</li>
+                            </ul>
+                            <p><strong>Conclusion for Task 1</strong>: The identified distinctions are F6(p) and F19(d).</p>
+                        </div>
+
+                        <h3>Tasks 2 & 3: Analyze and Identify Significant Distinctions</h3>
+                        <p>The next steps involve using a legal knowledge hierarchy to determine which distinctions are significant.</p>
+
+                        <h4>The Factor Hierarchy</h4>
+                        <p>Factors provide evidence for more abstract legal concerns, which in turn inform high-level legal issues. In our example, the factors relate to the concern C102_Efforts-To-Maintain-Secrecy, which supports the legal issue I101_Trade-Secret.</p>
+                        
+                        <div class="figure-placeholder">
+                            <img src="/illustrative_example.png" alt="Figure 3: An example factor hierarchy for trade secret law, connecting base-level factors to the concern of Efforts-To-Maintain-Secrecy and the legal issue of Trade-Secret. Solid lines indicate strong support and dashed lines indicate weak support; this support can be for or against a concern, depending on which party the factor favors." style="max-width:80%;height:auto" />
+                            <p><strong>Figure 3.</strong> An example factor hierarchy for trade secret law, connecting base-level factors to the concern of Efforts-To-Maintain-Secrecy and the legal issue of Trade-Secret. Solid lines indicate strong support and dashed lines indicate weak support; this support can be for or against a concern, depending on which party the factor favors.</p>
+                        </div>
+
+                        <h4>Effective Support and Blocking</h4>
+                        <p>A key step is determining if a factor's support is "effective." Weak evidence can be blocked by strong opposing evidence. For example, F6_Security-Measures(p) provides strong support for C102, while F23_Waiver-of-Confidentiality(d) provides only weak support. In C2, the strong pro-plaintiff support from F6(p) blocks the weak pro-defendant support from F23(d). Therefore, only F6(p) provides effective support for the concern C102 in the precedent case.</p>
+
+                        <h4>Emphasis, Downplay, and Significance</h4>
+                        <p>The significance of a distinction depends on whether it can be emphasized or downplayed. A distinction is significant if it can be emphasized and cannot be downplayed.</p>
+
+                        <div class="boxed">
+                            <strong>Analysis of Distinctions</strong>
+                            <ul>
+                                <li><strong>Analysis of F6(p)</strong>: It can be <strong>emphasized</strong> because it provides effective support for concern C102 in C2, and the current case C1 lacks any pro-plaintiff factor to support this concern. It <strong>cannot be downplayed</strong> because C1 has no alternative pro-plaintiff factor to make the same point.</li>
+                                <li><strong>Analysis of F19(d)</strong>: It can be <strong>emphasized</strong> because it provides effective support for C102 in C1, and the precedent case C2 lacks any pro-defendant factor with effective support for this concern (as F23(d) was blocked). It <strong>cannot be downplayed</strong> because C2 has no alternative pro-defendant factor.</li>
+                            </ul>
+                        </div>
+
+                        <div class="reviewer-comment">
+                            <strong>Legal Argument: Emphasizing a Distinction</strong>
+                            <p><strong>Defendant's Counsel in C1 argues:</strong> "Your Honor, opposing counsel's reliance on the precedent C2 is misplaced. The court in C2 found for the plaintiff largely because they had implemented extensive security measures (F6), which strongly supported the concern of efforts to maintain secrecy (C102). Our current plaintiff, Company A, has no such factor to its name. This is not a minor difference; it is a critical gap in their argument. The very basis for the precedent's ruling is absent here, making the distinction significant."</p>
+                        </div>
+
+                        <div class="reviewer-comment">
+                            <strong>Legal Argument: Failed Attempt to Downplay</strong>
+                            <p><strong>Plaintiff's Counsel in C1 would need to counter-argue:</strong> To downplay this distinction, the plaintiff would need to show that the underlying concern is still addressed. For instance: "While it is true we did not have the same extensive security measures (F6) as the plaintiff in the precedent, the concern for efforts to maintain secrecy (C102) is met by an alternative factor in our case." However, since Company A has no such alternative factor, this downplaying argument fails, leaving the distinction successfully emphasized by the defendant.</p>
+                        </div>
+
+                        <table>
+                            <caption><strong>Significance Analysis of Distinctions</strong></caption>
+                            <thead>
+                                <tr>
+                                    <th>Distinction</th>
+                                    <th>Can be Emphasized?</th>
+                                    <th>Can be Downplayed?</th>
+                                    <th>Significant?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>F6(p)</td>
+                                    <td>YES</td>
+                                    <td>NO</td>
+                                    <td><strong>YES</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>F19(d)</td>
+                                    <td>YES</td>
+                                    <td>NO</td>
+                                    <td><strong>YES</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p><strong>Conclusion for Task 3</strong>: Both distinctions are significant. The existence of significant distinctions suggests the precedent C2 should not apply in the current case C1.</p>
+                    </section>
+                    
+                    <section id="results">
+                        <h2>📊 Experimental Results & Core Conclusions</h2>
+                        <p>The experimental results clearly reveal systemic weaknesses in how current reasoning LLMs handle hierarchical legal reasoning tasks.</p>
+                        
+                         <div class="figure-placeholder">
+                            <img src="/results.png" alt="Results: accuracy drops with task complexity" style="max-width:80%;width:80%;height:auto" />
+                            <p><strong>Figure 4.</strong> Model performance across Tasks 1-3. The left panel illustrates accuracy, showing a decline as tasks become more complex. The right panel displays the average number of thinking tokens used, which increases with task difficulty.</p>
+                        </div>
+
+                        <h3>Finding 1: Performance Degrades Sharply with Task Complexity</h3>
+                        <ul>
+                            <li><strong>Task 1 (Surface-level Identification)</strong>: All models achieve <strong>100%</strong> accuracy, indicating they excel at simple pattern recognition and comparison.</li>
+                            <li><strong>Task 2 (Hierarchical Reasoning)</strong>: Accuracy drops significantly, ranging from <strong>64.82%</strong> (gemini-flash) to <strong>92.09%</strong> (gpt-5).</li>
+                            <li><strong>Task 3 (Integrated Analysis)</strong>: Performance <strong>collapses</strong>, with accuracy plummeting to a range of <strong>11.46%</strong> (gemini-flash) to <strong>33.99%</strong> (qwen3-thinking), showing that integrating multiple reasoning steps is a major challenge.</li>
+                        </ul>
+
+                        <table>
+                            <caption><strong>Accuracy and thinking tokens across Tasks 1-3. Accuracy (higher is better) and average thinking tokens per instance.</strong></caption>
+                            <thead>
+                                <tr>
+                                    <th rowspan="2"><strong>Model</strong></th>
+                                    <th colspan="3"><strong>Accuracy (%)</strong></th>
+                                    <th colspan="3"><strong>Thinking Tokens</strong></th>
+                                </tr>
+                                <tr>
+                                    <th><strong>Task 1</strong></th>
+                                    <th><strong>Task 2</strong></th>
+                                    <th><strong>Task 3</strong></th>
+                                    <th><strong>Task 1</strong></th>
+                                    <th><strong>Task 2</strong></th>
+                                    <th><strong>Task 3</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>gemini-flash</strong></td>
+                                    <td>100.00</td>
+                                    <td>64.82</td>
+                                    <td>11.46</td>
+                                    <td>654.90</td>
+                                    <td>5,144.72</td>
+                                    <td>15,262.17</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>gemini-pro</strong></td>
+                                    <td>100.00</td>
+                                    <td>85.77</td>
+                                    <td>21.74</td>
+                                    <td>929.30</td>
+                                    <td>2,973.59</td>
+                                    <td>7,019.41</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>gpt-oss-120b</strong></td>
+                                    <td>100.00</td>
+                                    <td>77.08</td>
+                                    <td>22.53</td>
+                                    <td>356.56</td>
+                                    <td>1,642.34</td>
+                                    <td>3,942.67</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>qwen3-thinking</strong></td>
+                                    <td>100.00</td>
+                                    <td>78.66</td>
+                                    <td>33.99</td>
+                                    <td>2,010.80</td>
+                                    <td>9,596.17</td>
+                                    <td>15,677.82</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>gpt-5</strong></td>
+                                    <td>100.00</td>
+                                    <td>92.09</td>
+                                    <td>23.32</td>
+                                    <td>487.01</td>
+                                    <td>3,189.27</td>
+                                    <td>7,025.01</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>qwen3-non-thinking</strong></td>
+                                    <td>100.00</td>
+                                    <td>30.04</td>
+                                    <td>0.00</td>
+                                    <td>/</td>
+                                    <td>/</td>
+                                    <td>/</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h3>Finding 2: The "Thinking Longer, Not Smarter" Paradox</h3>
+                        <p>This is the most surprising finding: models consistently expend <strong class="highlight">more</strong> computational resources (thinking tokens) on answers they get <strong class="highlight">wrong</strong>.</p>
+                         <div class="figure-placeholder">
+                            <img src="/thinking_differences.png" alt="Thinking differences: more tokens on wrong answers" style="max-width:40%;width:40%;height:auto" />
+                            <p><strong>Figure 5.</strong> Token usage patterns reveal inefficient reasoning strategies. The figure shows the difference in thinking tokens between incorrect and correct responses across Tasks 2-3, highlighting how models often expend more computational effort on answers they ultimately get wrong.</p>
+                        </div>
+                        <p>
+                            For instance, in Task 2, gpt-5 used an average of 4,456 tokens for incorrect responses compared to 3,081 for correct ones—a 45% increase in computational effort for a worse outcome. This suggests that when models encounter difficult problems, they may fall into inefficient reasoning loops or engage in extensive but unfocused analysis rather than effectively finding the correct path.
+                        </p>
+
+                        <table>
+                            <caption><strong>Thinking tokens by correctness for Tasks 2 and 3.</strong></caption>
+                            <thead>
+                                <tr>
+                                    <th rowspan="2"><strong>Model</strong></th>
+                                    <th colspan="2"><strong>Task 2</strong></th>
+                                    <th colspan="2"><strong>Task 3</strong></th>
+                                </tr>
+                                <tr>
+                                    <th><strong>Correct</strong></th>
+                                    <th><strong>Incorrect</strong></th>
+                                    <th><strong>Correct</strong></th>
+                                    <th><strong>Incorrect</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>gemini-flash</strong></td>
+                                    <td>5,087.61</td>
+                                    <td>5,249.65</td>
+                                    <td>15,263.26</td>
+                                    <td>15,290.12</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>gemini-pro</strong></td>
+                                    <td>2,977.37</td>
+                                    <td>2,951.14</td>
+                                    <td>7,371.33</td>
+                                    <td>6,895.77</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>gpt-oss-120b</strong></td>
+                                    <td>1,568.21</td>
+                                    <td>1,864.57</td>
+                                    <td>3,607.08</td>
+                                    <td>4,076.53</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>qwen3-thinking</strong></td>
+                                    <td>9,246.05</td>
+                                    <td>10,872.13</td>
+                                    <td>15,392.91</td>
+                                    <td>16,133.68</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>gpt-5</strong></td>
+                                    <td>3,081.44</td>
+                                    <td>4,456.33</td>
+                                    <td>6,126.01</td>
+                                    <td>7,354.63</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3>Finding 3: No Strong Correlation Between Effort and Performance</h3>
+                        <ul>
+                            <li><strong class="highlight">High Cost ≠ High Performance</strong>: <code>qwen3-thinking</code> used the most tokens in all tasks but did not achieve the highest accuracy in Task 2. Specifically, it used 3.0 times more tokens than <code>gpt-5</code> in Task 2 for worse performance.</li>
+                            <li><strong class="highlight">The Efficiency of Quality Reasoning</strong>: <code>gpt-5</code> demonstrated the most efficient reasoning in the study, achieving high accuracy with moderate token usage. This finding challenges the assumption that more reasoning effort leads to better outcomes; instead, the quality of reasoning is more important than the quantity.</li>
+                        </ul>
+
+                        <h3>Finding 4: The Value of Intermediate Reasoning</h3>
+                        <p>
+                            By comparing <code>qwen3-thinking</code> to its non-thinking counterpart, the study demonstrates the performance gain from intermediate reasoning processes.
+                        </p>
+                        <ul>
+                            <li>In Task 2, the thinking model's accuracy (78.66%) was a <strong>2.6-fold improvement</strong> over the non-thinking model (30.04%).</li>
+                            <li>In Task 3, the non-thinking model failed completely (0.00% accuracy), while the thinking model maintained some capability (33.99%).</li>
+                        </ul>
+                        <p>This confirms that reasoning capabilities enabled by post-training strategies are beneficial for hierarchical reasoning tasks, though their effectiveness diminishes on the most complex, integrative tasks.</p>
+                        
+                    </section>
+                    
+                    <section id="case-study">
+                        <h2>💡 One More Thing...</h2>
+                        <p>To provide a qualitative understanding of the models' reasoning processes, we analyze excerpts from the thinking traces of qwen3-thinking and gpt-oss-120b on one instance of Task 3. This analysis reveals stark differences in reasoning styles and efficiency.</p>
+
+                        <h3>qwen3-thinking: A Verbose and Repetitive Process</h3>
+                        <p>The reasoning trace for qwen3-thinking is characterized by its verbosity and a tendency to repeatedly re-state definitions and the primary goal. The trace begins with a lengthy preamble where the model outlines the task and defines the core concepts multiple times before processing the input.</p>
+
+                        <div class="reviewer-comment">
+                            <strong>Excerpt 1: Repetitive Goal Setting</strong>
+                            <p>First, I need to identify all significant distinctions between the current case (C1) and the precedent case (C2). [...] The key definitions:</p>
+                            <ul>
+                                <li><strong>A distinction is an unshared factor between C1 and C2. There are two types:</strong>
+                                    <ol>
+                                        <li>A factor favoring C2's winner (defendant) is present in C2 but absent in C1.</li>
+                                        <li>A factor favoring C2's loser (plaintiff) is present in C1 but absent in C2.</li>
+                                    </ol>
+                                </li>
+                            </ul>
+                            <p>[...] So we have four distinctions: F11(d), F27(d), F15(p), F18(p). Now, for each of these, I need to check if it is significant. <strong>A significant distinction: can be emphasized and cannot be downplayed. [...] Let me read carefully.</strong> "A distinction can be emphasized if..." "A distinction can be downplayed if..." [...]</p>
+                        </div>
+
+                        <p>When analyzing specific distinctions, the model proceeds with a step-by-step application of the rules. However, this process is again marked by verbosity. The excerpt below shows the model correctly concluding that distinction F27(d) is not significant because it can be downplayed, but the reasoning is exhaustive.</p>
+
+                        <div class="reviewer-comment">
+                            <strong>Excerpt 2: Exhaustive Analysis of a Single Distinction</strong>
+                            <p>[...] Now, for downplay: <strong>a distinction can be downplayed if there is a concern/issue where F27 has support for defendant and C1 has alternative effective support for defendant.</strong> For C102: F27 has support for defendant, and C1 also has support for defendant (from F1 via C122), so for C102, C1 has alternative support for defendant. [...] So for C102, downplay is possible. [...] Therefore, for F27(d), it can be emphasized [...] but it can be downplayed [...], so not significant. [...]</p>
+                        </div>
+
+                        <p>This trace illustrates an inefficient reasoning style while ultimately capable of reaching the correct conclusions for intermediate steps. The model's tendency to "think out loud" about every detail, including redundant definitions, contributes to its high token consumption.</p>
+
+                        <h3>gpt-oss-120b: A More Concise, but Flawed, Approach</h3>
+                        <p>In contrast, the reasoning trace for gpt-oss-120b is more concise. The model quickly identifies the distinctions and proceeds to evaluate them without the extensive preamble observed in qwen3-thinking.</p>
+
+                        <div class="reviewer-comment">
+                            <strong>Excerpt 1: Direct Identification of Distinctions</strong>
+                            <p>[...] C2 winner is defendant. So "favoring C2's winner" = factors that favor defendant (d) present in C2 but not in C1. [...] distinctions: F11(d), F27(d) (type 1). Next plaintiff factors present in C1 but not in C2. [...] distinct plaintiff factors: F15(p), F18(p). Those are type 2 distinctions. Thus total distinctions: F11(d), F27(d), F15(p), F18(p). [...]</p>
+                        </div>
+
+                        <p>However, the model's haste appears to cause a factual error. It fails to identify a key support path in the hierarchy for one of the concerns, leading it to an incorrect conclusion.</p>
+
+                        <div class="reviewer-comment">
+                            <strong>Excerpt 2: Factual Error due to Missed Path</strong>
+                            <p>[...] Distinction D: F18(p) – effective support for I112 and I110. <strong>Check C2 effective support for I112? C2 factors: none linking to I112. [...] So C2 lacks support for I112. Also for I110 (downstream via I112). C2 lacks support.</strong> Any alternative support for I112 or I110 from C2? No. So no downplay. Thus F18(p) seems emphasized [...] and not downplayed. So it's significant. [...]</p>
+                        </div>
+
+                        <p>The model missed that in C2, factor F22(p) provides strong support for I110 via concern C111. This oversight led it to incorrectly identify F18(p) as significant. This comparison reveals a trade-off: qwen3-thinking's verbose process, while inefficient, was more methodical and led to a more accurate application of the rules. In contrast, gpt-oss-120b's faster, more direct approach was brittle and resulted in reasoning failures. This suggests that for complex, rule-based reasoning, a more deliberative process may be necessary to ensure accuracy.</p>
+                    </section>
+
+                    <section id="citation">
+                        <h2>📚 Citation</h2>
+                        <p>If you find this work useful, please cite our paper:</p>
+                        <pre><code>@article{zhang2025thinking,
+  title={Thinking Longer, Not Always Smarter: Evaluating LLM Capabilities in Hierarchical Legal Reasoning},
+  author={Zhang, Li and Grabmair, Matthias and Gray, Morgan and Ashley, Kevin},
+  journal={arXiv preprint arXiv:2510.08710},
+  year={2025}
+}</code></pre>
+                    </section>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrapper">
+            <h2 class="footer-heading">Thinking Longer, Not Always Smarter</h2>
+            <div class="footer-col-wrapper">
+                <div class="footer-col footer-col-1">
+                    <ul class="contact-list">
+                        <li class="p-name">Li Zhang</li>
+                        <li><a class="u-email" href="mailto:lizhang@pitt.edu">lizhang@pitt.edu</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col footer-col-2">
+                    <p>Evaluating LLM Capabilities in Hierarchical Legal Reasoning</p>
+                </div>
+                <div class="footer-col footer-col-3">
+                    <p>University of Pittsburgh & Technical University of Munich</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>
