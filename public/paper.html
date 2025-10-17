@@ -221,11 +221,17 @@
             hyphens: auto;
         }
 
-        .boxed strong {
+        .boxed > strong {
             display: block;
             font-size: 16px;
             color: var(--accent-color);
             margin-bottom: 8px;
+        }
+
+        .boxed li strong {
+            display: inline;
+            font-weight: 600;
+            color: inherit;
         }
 
         .figure-placeholder {
@@ -297,10 +303,16 @@
             hyphens: auto;
         }
 
-        .reviewer-comment strong {
+        .reviewer-comment > strong {
             color: var(--accent-color);
             display: block;
             margin-bottom: 8px;
+        }
+
+        .reviewer-comment li strong {
+            display: inline;
+            font-weight: 600;
+            color: inherit;
         }
 
         dl {
