@@ -701,17 +701,17 @@
                         <div class="boxed">
                             <strong>Example Cases</strong>
                             <ul>
-                                <li><strong>Current Case (C1)</strong>: Company A (plaintiff) is suing a former employee (defendant) for trade secret theft, but they lacked basic security measures.</li>
-                                <li><strong>Precedent Case (C2)</strong>: Company B (plaintiff) won a trade secret lawsuit against a former employee (defendant) because they took extensive security measures (locked facilities, employee confidentiality agreements, restricted access). However, the plaintiff also waived their employees' confidentiality agreement.</li>
+                                <li><strong>Current Case (C1)</strong>: Company A (plaintiff) is suing a former employee (defendant) for trade secret theft. The employee knew the information was confidential. Company A lacked security measures, and they waived their employees' confidentiality agreement.</li>
+                                <li><strong>Precedent Case (C2)</strong>: Company B (plaintiff) lost a trade secret lawsuit against a former employee (defendant) because they lacked security measures.</li>
                             </ul>
                         </div>
 
                         <h3>Factor Representation</h3>
-                        <p>The natural language narratives can be translated into a set of pre-defined factors. A (d) marks a factor favoring the defendant, while (p) favors the plaintiff. For instance, "lacked basic security measures" corresponds to F19_No-Security-Measures(d), which hurts the plaintiff's claim. The factor representations for our example cases are as follows:</p>
+                        <p>The natural language narratives can be translated into a set of pre-defined factors. A (d) marks a factor favoring the defendant, while (p) favors the plaintiff. For instance, "lacked security measures" corresponds to F19_No-Security-Measures(d), which hurts the plaintiff's claim. Conversely, the employee knowing the information was confidential (F21_Knew-Info-Confidential(p)) supports the plaintiff's argument, but waiving confidentiality agreement (F23_Waiver-of-Confidentiality(d)) weakens their claim. The factor representations for our example cases are as follows:</p>
                         <ul>
-                            <li><strong>Current Case (C1) Factors</strong>: F19_No-Security-Measures(d)</li>
-                            <li><strong>Precedent Case (C2) Factors</strong>: F6_Security-Measures(p), F23_Waiver-of-Confidentiality(d)</li>
-                            <li><strong>Precedent (C2) Winner</strong>: Plaintiff</li>
+                            <li><strong>Current Case (C1) Factors</strong>: F19_No-Security-Measures(d), F21_Knew-Info-Confidential(p), F23_Waiver-of-Confidentiality(d)</li>
+                            <li><strong>Precedent Case (C2) Factors</strong>: F19_No-Security-Measures(d)</li>
+                            <li><strong>Precedent (C2) Winner</strong>: Defendant</li>
                         </ul>
 
                         <h3>Task 1: Identify Distinctions</h3>
@@ -719,47 +719,61 @@
                         
                         <div class="boxed">
                             <strong>Analysis of Distinctions</strong>
-                            <p>A distinction is an unshared factor that weakens the analogy between the precedent and the current case.</p>
+                            <p>A distinction is an unshared factor that indicates the precedent case (C2) is not a good analogy for the current case (C1). There are two types of distinctions:</p>
+                            <ol>
+                                <li>A factor favoring C2's winner is present in C2 but absent in C1.</li>
+                                <li>A factor favoring C2's loser is present in C1 but absent in C2.</li>
+                            </ol>
+                            <p>For our example:</p>
                             <ul>
-                                <li><strong>Pro-Plaintiff factor in C2, absent in C1</strong>: F6_Security-Measures(p). This is a distinction because the precedent winner (plaintiff) was strengthened by a factor that the current plaintiff lacks. The defendant in C1 can argue that the precedent is not a good analogy because the plaintiff's victory in C2 relied on F6, which is absent here.</li>
-                                <li><strong>Pro-Defendant factor in C1, absent in C2</strong>: F19_No-Security-Measures(d). This is a distinction because the current case contains a weakness for the plaintiff (a strength for the defendant) that was not present in the precedent.</li>
+                                <li><strong>Question 1.1</strong>: Are there any pro-defendant factors from C2 (the winner) that are absent in C1? C2 has F19_No-Security-Measures(d) which favors the defendant. C1 also has F19_No-Security-Measures(d). Therefore, there are no distinctions from this condition.</li>
+                                <li><strong>Question 1.2</strong>: Are there any pro-plaintiff factors in C1 (favoring C2's loser) that were not in C2? Yes. C1 has F21_Knew-Info-Confidential(p) which favors the plaintiff. C2 does not have this factor. Therefore, F21(p) is a distinction.</li>
                             </ul>
-                            <p><strong>Conclusion for Task 1</strong>: The identified distinctions are F6(p) and F19(d).</p>
+                            <p><strong>Conclusion for Task 1</strong>: The identified distinction is F21(p).</p>
                         </div>
 
                         <h3>Tasks 2 & 3: Analyze and Identify Significant Distinctions</h3>
                         <p>The next steps involve using a legal knowledge hierarchy to determine which distinctions are significant.</p>
 
                         <h4>The Factor Hierarchy</h4>
-                        <p>Factors provide evidence for more abstract legal concerns, which in turn inform high-level legal issues. In our example, the factors relate to the concern C102_Efforts-To-Maintain-Secrecy, which supports the legal issue I101_Trade-Secret.</p>
+                        <p>Factors provide evidence for more abstract legal concerns, which in turn inform high-level legal issues. In our example, we have two legal issues:</p>
+                        <ul>
+                            <li><strong>Legal Issue I101</strong>: Did the plaintiff's information constitute a trade secret?
+                                <ul>
+                                    <li><strong>Concern C102</strong>: Did the plaintiff take efforts to maintain secrecy? This concern is supported or weakened by F23_Waiver-of-Confidentiality(d) and F19_No-Security-Measures(d).</li>
+                                </ul>
+                            </li>
+                            <li><strong>Legal Issue I114</strong>: Was there a confidential relationship?
+                                <ul>
+                                    <li><strong>Concern C115</strong>: Did the defendant have notice of confidentiality? This concern is supported by F21_Knew-Info-Confidential(p).</li>
+                                </ul>
+                            </li>
+                        </ul>
                         
                         <div class="figure-placeholder">
-                            <img src="/illustrative_example.png" alt="Figure 3: An example factor hierarchy for trade secret law, connecting base-level factors to the concern of Efforts-To-Maintain-Secrecy and the legal issue of Trade-Secret. Solid lines indicate strong support and dashed lines indicate weak support; this support can be for or against a concern, depending on which party the factor favors." style="max-width:80%;height:auto" />
-                            <p><strong>Figure 3.</strong> An example factor hierarchy for trade secret law, connecting base-level factors to the concern of Efforts-To-Maintain-Secrecy and the legal issue of Trade-Secret. Solid lines indicate strong support and dashed lines indicate weak support; this support can be for or against a concern, depending on which party the factor favors.</p>
+                            <img src="/illustrative_example.png" alt="Figure 3: An example factor hierarchy for trade secret law, connecting base-level factors to intermediate legal concerns and top-level legal issues. Solid lines indicate strong support and dashed lines indicate weak support; this support can be for or against a concern, depending on which party the factor favors." style="max-width:80%;height:auto" />
+                            <p><strong>Figure 3.</strong> An example factor hierarchy for trade secret law, connecting base-level factors to intermediate legal concerns and top-level legal issues. Solid lines indicate strong support and dashed lines indicate weak support; this support can be for or against a concern, depending on which party the factor favors.</p>
                         </div>
-
-                        <h4>Effective Support and Blocking</h4>
-                        <p>A key step is determining if a factor's support is "effective." Weak evidence can be blocked by strong opposing evidence. For example, F6_Security-Measures(p) provides strong support for C102, while F23_Waiver-of-Confidentiality(d) provides only weak support. In C2, the strong pro-plaintiff support from F6(p) blocks the weak pro-defendant support from F23(d). Therefore, only F6(p) provides effective support for the concern C102 in the precedent case.</p>
 
                         <h4>Emphasis, Downplay, and Significance</h4>
                         <p>The significance of a distinction depends on whether it can be emphasized or downplayed. A distinction is significant if it can be emphasized and cannot be downplayed.</p>
+                        
+                        <p><strong>Definition of Downplaying</strong>: A distinction \(D\) can be downplayed if you can find an ancestor concern \(P\) that meets both conditions: (1) \(P\) is an ancestor of \(D\) in the hierarchy, and (2) In C1, a different factor (\(F_{\text{alt}}\)) provides support for that same concern \(P\).</p>
+                        
+                        <p><strong>Definition of Emphasizing</strong>: A distinction \(D\) can be emphasized if you can find an ancestor concern \(P\) that meets both conditions: (1) \(P\) is an ancestor of \(D\), and (2) The precedent case C2 lacks any factor that provides support for \(P\) (when the distinction favors C2's loser) OR the current case C1 lacks any factor that provides support for \(P\) (when the distinction favors C2's winner).</p>
 
-                        <div class="boxed">
-                            <strong>Analysis of Distinctions</strong>
-                            <ul>
-                                <li><strong>Analysis of F6(p)</strong>: It can be <strong>emphasized</strong> because it provides effective support for concern C102 in C2, and the current case C1 lacks any pro-plaintiff factor to support this concern. It <strong>cannot be downplayed</strong> because C1 has no alternative pro-plaintiff factor to make the same point.</li>
-                                <li><strong>Analysis of F19(d)</strong>: It can be <strong>emphasized</strong> because it provides effective support for C102 in C1, and the precedent case C2 lacks any pro-defendant factor with effective support for this concern (as F23(d) was blocked). It <strong>cannot be downplayed</strong> because C2 has no alternative pro-defendant factor.</li>
-                            </ul>
-                        </div>
+                        <ul>
+                            <li><strong>Analysis of F21(p)</strong>: F21(p) supports C115 (Notice-Of-Confidentiality), which supports I114 (Confidential-Relationship). Since F21(p) favors C2's loser (plaintiff), we check if C2 lacks any factor providing support for C115. The Precedent Case (C2) has no pro-plaintiff factor supporting this concern. The absence of F21(p) in C2 is critical because it leaves this point entirely unsupported for the plaintiff in C2. Therefore, F21(p) <strong>can be emphasized</strong>. For downplaying, C1 has F21(p) as the only pro-plaintiff factor providing support for C115. While C1 also has F23_Waiver-of-Confidentiality(d) and F19_No-Security-Measures(d), these factors favor the defendant, not the plaintiff. Therefore, there is no alternative pro-plaintiff factor that can downplay the distinction. Thus, F21(p) <strong>cannot be downplayed</strong>. Table 1 summarizes the significance analysis for this distinction.</li>
+                        </ul>
 
                         <div class="reviewer-comment">
                             <strong>Legal Argument: Emphasizing a Distinction</strong>
-                            <p><strong>Defendant's Counsel in C1 argues:</strong> "Your Honor, opposing counsel's reliance on the precedent C2 is misplaced. The court in C2 found for the plaintiff largely because they had implemented extensive security measures (F6), which strongly supported the concern of efforts to maintain secrecy (C102). Our current plaintiff, Company A, has no such factor to its name. This is not a minor difference; it is a critical gap in their argument. The very basis for the precedent's ruling is absent here, making the distinction significant."</p>
+                            <p><strong>Plaintiff's Counsel in C1 argues:</strong> "Your Honor, the precedent case C2 is not a good analogy for our current case. In C2, the plaintiff had no factors to support the concern of notice of confidentiality (C115), which supports the legal issue of confidential relationship (I114). However, in our current case C1, we have F21_Knew-Info-Confidential(p), which provides crucial support for C115. The presence of F21(p) in C1 strengthens our position regarding notice of confidentiality, making our case significantly stronger than the plaintiff's position was in C2. This distinction is critical and cannot be dismissed."</p>
                         </div>
 
                         <div class="reviewer-comment">
                             <strong>Legal Argument: Failed Attempt to Downplay</strong>
-                            <p><strong>Plaintiff's Counsel in C1 would need to counter-argue:</strong> To downplay this distinction, the plaintiff would need to show that the underlying concern is still addressed. For instance: "While it is true we did not have the same extensive security measures (F6) as the plaintiff in the precedent, the concern for efforts to maintain secrecy (C102) is met by an alternative factor in our case." However, since Company A has no such alternative factor, this downplaying argument fails, leaving the distinction successfully emphasized by the defendant.</p>
+                            <p><strong>Defendant's Counsel in C1 would need to counter-argue:</strong> To downplay this distinction, the defendant would need to show that the underlying concern C115 (Notice-Of-Confidentiality) is still addressed by alternative factors in C1. However, F21(p) is the only pro-plaintiff factor providing support for C115 in C1. While C1 has F23_Waiver-of-Confidentiality(d) and F19_No-Security-Measures(d), these factors favor the defendant, not the plaintiff. Therefore, there is no alternative pro-plaintiff factor that can downplay the distinction, leaving it successfully emphasized by the plaintiff.</p>
                         </div>
 
                         <table>
@@ -774,13 +788,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>F6(p)</td>
-                                    <td>YES</td>
-                                    <td>NO</td>
-                                    <td><strong>YES</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>F19(d)</td>
+                                    <td>F21(p)</td>
                                     <td>YES</td>
                                     <td>NO</td>
                                     <td><strong>YES</strong></td>
@@ -788,7 +796,7 @@
                             </tbody>
                         </table>
 
-                        <p><strong>Conclusion for Task 3</strong>: Both distinctions are significant. The existence of significant distinctions suggests the precedent C2 should not apply in the current case C1.</p>
+                        <p><strong>Conclusion for Task 3</strong>: The significant distinction is F21(p). The existence of this significant distinction suggests the precedent C2 should not apply in the current case C1.</p>
                     </section>
                     
                     <section id="results">
